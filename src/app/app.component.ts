@@ -1,26 +1,31 @@
 import { Component } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  
+  constructor (private httpService: HttpClient) { }
+
   title = 'chartProject';
 
   chartOptions ={
-response: true
-  }
+response: true}
+
+
   labels =  ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
  //Static
   chartData = [
     {
       label: '1st Year',
-      data: [21, 56, 4, 31, 45, 15, 57, 61, 9, 17, 24, 59] 
+      data: [] 
     },
     { 
       label: '2nd Year',
-      data: [47, 9, 28, 54, 77, 51, 24]
+      data: []
     }
   ];
   colors = [
@@ -31,6 +36,24 @@ response: true
       backgroundColor: 'rgba(30, 169, 224, 0.8)'
     }
   ]
+
+  
+  
+  
+  
+  
+  
+  
+  ngOnInit () {
+    this.httpService.get('./assets/jsonFile.json', {responseType: 'json'}).subscribe(
+    data => {
+        this.chartData = data as any [];	 // FILL THE CHART ARRAY WITH DATA.
+    },
+    (err: HttpErrorResponse) => {
+        console.log (err.message);
+    }
+    );}
+  
   onChartClick(event) {
     console.log(event);
   }
